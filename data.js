@@ -1,6 +1,6 @@
 const tripData = {
   title: "Thailand Trip 2026",
-  travellers: "Michael, Elena Anuta, Sofia Rita, Ciaran Vasile Joyes",
+  travellers: "Michael, Anuta, Sofia and Ciaran",
   stops: [
     {
       type: "flight",
