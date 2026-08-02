@@ -80,7 +80,7 @@ const tripData = {
       cost: { total: null, currency: "THB", paid: null, outstanding: null },
     },
     {
-      type: "tour",
+      type: "accommodation",
       icon: "🚣",
       title: "Khao Sok \"Smiley\" Lake Tour",
       dateRange: "26–28 Nov 2026",
