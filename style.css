@@ -150,6 +150,73 @@ header p {
   color: #d97706;
 }
 
+/* ── Costs Summary ── */
+#costs-summary {
+  max-width: 700px;
+  margin: 0.5rem auto 0;
+  padding-left: 2rem;
+}
+
+.summary-heading {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #888;
+  margin: 0 0 0.6rem;
+}
+
+.totals-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  font-size: 0.9rem;
+}
+
+.totals-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.55rem 1.2rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.totals-row:last-child {
+  border-bottom: none;
+}
+
+.type-label {
+  color: #555;
+  flex-shrink: 0;
+}
+
+.type-amount {
+  font-weight: 600;
+  text-align: right;
+}
+
+.type-amount em {
+  font-style: normal;
+  font-weight: 500;
+  color: #d97706;
+}
+
+.totals-grand {
+  background: #f9fafb;
+  border-top: 2px solid #e5e7eb;
+}
+
+.totals-grand .type-label {
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.totals-grand .type-amount {
+  font-weight: 700;
+}
+
 /* Type-based marker colours */
 .stop.flight .stop-marker {
   border-color: #3b82f6;

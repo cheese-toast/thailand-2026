@@ -67,8 +67,70 @@ function toggleDetails(index) {
   }
 }
 
+function renderCostsSummary() {
+  const typeLabels = {
+    flight: "✈️ Flights",
+    accommodation: "🏨 Accommodation",
+    transfer: "🚐 Transfers",
+    tour: "🚣 Tours",
+  };
+
+  const byType = {};
+  const byCurrency = {};
+
+  tripData.stops.forEach(({ type, cost }) => {
+    const cur = cost.currency;
+    if (!byType[type]) byType[type] = {};
+    if (!byType[type][cur]) byType[type][cur] = { known: 0, tbc: 0 };
+    if (!byCurrency[cur]) byCurrency[cur] = { known: 0, tbc: 0 };
+
+    if (cost.total !== null) {
+      byType[type][cur].known += cost.total;
+      byCurrency[cur].known += cost.total;
+    } else {
+      byType[type][cur].tbc++;
+      byCurrency[cur].tbc++;
+    }
+  });
+
+  function fmtGroup(cur, { known, tbc }) {
+    const parts = [];
+    if (known > 0) parts.push(`${cur} ${known.toLocaleString()}`);
+    if (tbc > 0) parts.push(`<em>+${tbc} TBC</em>`);
+    return parts.length ? parts.join(" ") : `<em>TBC</em>`;
+  }
+
+  const typeRows = Object.keys(typeLabels)
+    .filter((t) => byType[t])
+    .map((t) => {
+      const amounts = Object.entries(byType[t])
+        .map(([cur, g]) => fmtGroup(cur, g))
+        .join("  ");
+      return `<div class="totals-row">
+          <span class="type-label">${typeLabels[t]}</span>
+          <span class="type-amount">${amounts}</span>
+        </div>`;
+    })
+    .join("");
+
+  const grandTotal = Object.entries(byCurrency)
+    .map(([cur, g]) => fmtGroup(cur, g))
+    .join("  ·  ");
+
+  return `
+    <h2 class="summary-heading">Cost Totals</h2>
+    <div class="totals-card">
+      ${typeRows}
+      <div class="totals-row totals-grand">
+        <span class="type-label">Total</span>
+        <span class="type-amount">${grandTotal}</span>
+      </div>
+    </div>`;
+}
+
 document.getElementById("trip-title").textContent = tripData.title;
 document.getElementById("trip-travellers").textContent = tripData.travellers;
 document.getElementById("timeline").innerHTML = tripData.stops
   .map((stop, i) => renderStop(stop, i))
   .join("");
+document.getElementById("costs-summary").innerHTML = renderCostsSummary();
