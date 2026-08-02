@@ -1,4 +1,39 @@
 let thbToGbpRate = null;
+let activeFilter = null;
+
+function renderFilterBar() {
+  const typeLabels = {
+    flight: "✈️ Flights",
+    accommodation: "🏨 Accommodation",
+    transfer: "🚐 Transfers",
+    tour: "🚣 Tours",
+  };
+  const types = Object.keys(typeLabels).filter((t) =>
+    tripData.stops.some((s) => s.type === t)
+  );
+  const typeButtons = types
+    .map(
+      (t) =>
+        `<button class="filter-btn" data-type="${t}" onclick="setFilter(this)">${typeLabels[t]}</button>`
+    )
+    .join("");
+  return `<button class="filter-btn active" data-type="" onclick="setFilter(this)">All</button>${typeButtons}`;
+}
+
+function setFilter(btn) {
+  const type = btn.dataset.type || null;
+  activeFilter = type === activeFilter ? null : type;
+  document.querySelectorAll(".filter-btn").forEach((b) => {
+    b.classList.toggle(
+      "active",
+      activeFilter === null ? !b.dataset.type : b.dataset.type === activeFilter
+    );
+  });
+  document.querySelectorAll("#timeline .stop").forEach((el) => {
+    el.style.display =
+      !activeFilter || el.classList.contains(activeFilter) ? "" : "none";
+  });
+}
 
 function formatMoney(amount, currency) {
   if (amount === null || amount === undefined) return "TBC";
@@ -158,6 +193,7 @@ function renderCostsSummary() {
     // rate unavailable — GBP equivalents hidden
   }
 
+  document.getElementById("filter-bar").innerHTML = renderFilterBar();
   document.getElementById("trip-title").textContent = tripData.title;
   document.getElementById("trip-travellers").textContent = tripData.travellers;
   document.getElementById("timeline").innerHTML = tripData.stops
