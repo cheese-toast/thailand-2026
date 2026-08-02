@@ -1,0 +1,165 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial,
+    sans-serif;
+  background: #f4f6f8;
+  margin: 0;
+  padding: 0 1rem 3rem;
+  color: #1a1a1a;
+}
+
+header {
+  text-align: center;
+  padding: 2rem 0 1rem;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+header p {
+  color: #666;
+  margin-top: 0.3rem;
+}
+
+#timeline {
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  padding-left: 2rem;
+}
+
+#timeline::before {
+  content: "";
+  position: absolute;
+  left: 1.1rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #d8dde3;
+}
+
+.stop {
+  position: relative;
+  margin-bottom: 1.2rem;
+}
+
+.stop-marker {
+  position: absolute;
+  left: -2rem;
+  top: 0.3rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  background: #fff;
+  border: 2px solid #d8dde3;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  z-index: 1;
+}
+
+.stop-content {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.stop-header {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 1rem 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+}
+
+.stop-header:hover {
+  background: #fafbfc;
+}
+
+.stop-title {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.stop-date {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 0.2rem;
+}
+
+.stop-summary {
+  font-size: 0.9rem;
+  color: #444;
+  margin-top: 0.3rem;
+}
+
+.chevron {
+  font-size: 1.2rem;
+  color: #999;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.stop-details {
+  border-top: 1px solid #eee;
+  padding: 0.8rem 1.2rem 1rem;
+  font-size: 0.9rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.detail-row span:first-child {
+  color: #777;
+}
+
+.detail-row.todo span:last-child {
+  color: #d97706;
+  font-weight: 600;
+}
+
+.cost-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.8rem;
+  padding-top: 0.6rem;
+  border-top: 2px solid #eee;
+  font-size: 0.9rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cost-row .outstanding strong {
+  color: #d97706;
+}
+
+/* Type-based marker colours */
+.stop.flight .stop-marker {
+  border-color: #3b82f6;
+}
+.stop.accommodation .stop-marker {
+  border-color: #10b981;
+}
+.stop.transfer .stop-marker {
+  border-color: #f59e0b;
+}
+.stop.tour .stop-marker {
+  border-color: #8b5cf6;
+}
