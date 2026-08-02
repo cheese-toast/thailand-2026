@@ -1,15 +1,26 @@
+let thbToGbpRate = null;
+
 function formatMoney(amount, currency) {
   if (amount === null || amount === undefined) return "TBC";
   return `${currency} ${amount.toLocaleString()}`;
+}
+
+function toGbp(thbAmount) {
+  if (!thbAmount || thbToGbpRate === null) return "";
+  const gbp = (thbAmount / thbToGbpRate).toLocaleString("en-GB", {
+    maximumFractionDigits: 0,
+  });
+  return `<span class="gbp-equiv">≈ GBP ${gbp}</span>`;
 }
 
 function renderCost(cost) {
   const total = formatMoney(cost.total, cost.currency);
   const paid = formatMoney(cost.paid, cost.currency);
   const outstanding = formatMoney(cost.outstanding, cost.currency);
+  const equiv = cost.currency === "THB" ? toGbp(cost.total) : "";
   return `
     <div class="cost-row">
-      <span>Total: <strong>${total}</strong></span>
+      <span>Total: <strong>${total}</strong>${equiv ? " " + equiv : ""}</span>
       <span>Paid: <strong>${paid}</strong></span>
       <span class="${cost.outstanding ? "outstanding" : ""}">
         Outstanding: <strong>${outstanding}</strong>
@@ -95,7 +106,10 @@ function renderCostsSummary() {
 
   function fmtGroup(cur, { known, tbc }) {
     const parts = [];
-    if (known > 0) parts.push(`${cur} ${known.toLocaleString()}`);
+    if (known > 0) {
+      const equiv = cur === "THB" ? " " + toGbp(known) : "";
+      parts.push(`${cur} ${known.toLocaleString()}${equiv}`);
+    }
     if (tbc > 0) parts.push(`<em>+${tbc} TBC</em>`);
     return parts.length ? parts.join(" ") : `<em>TBC</em>`;
   }
@@ -128,9 +142,26 @@ function renderCostsSummary() {
     </div>`;
 }
 
-document.getElementById("trip-title").textContent = tripData.title;
-document.getElementById("trip-travellers").textContent = tripData.travellers;
-document.getElementById("timeline").innerHTML = tripData.stops
-  .map((stop, i) => renderStop(stop, i))
-  .join("");
-document.getElementById("costs-summary").innerHTML = renderCostsSummary();
+(async () => {
+  try {
+    const resp = await fetch("https://open.er-api.com/v6/latest/GBP");
+    if (resp.ok) {
+      const data = await resp.json();
+      thbToGbpRate = data.rates.THB;
+      const date = new Date(data.time_last_update_utc).toISOString().slice(0, 10);
+      const note = document.createElement("p");
+      note.className = "rate-note";
+      note.textContent = `1 GBP = ${thbToGbpRate.toFixed(2)} THB (${date})`;
+      document.querySelector("header").appendChild(note);
+    }
+  } catch (_) {
+    // rate unavailable — GBP equivalents hidden
+  }
+
+  document.getElementById("trip-title").textContent = tripData.title;
+  document.getElementById("trip-travellers").textContent = tripData.travellers;
+  document.getElementById("timeline").innerHTML = tripData.stops
+    .map((stop, i) => renderStop(stop, i))
+    .join("");
+  document.getElementById("costs-summary").innerHTML = renderCostsSummary();
+})();

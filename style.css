@@ -150,6 +150,19 @@ header p {
   color: #d97706;
 }
 
+.gbp-equiv {
+  font-size: 0.82em;
+  font-weight: 400;
+  color: #888;
+  margin-left: 0.2rem;
+}
+
+.rate-note {
+  font-size: 0.78rem;
+  color: #aaa;
+  margin-top: 0.2rem;
+}
+
 /* ── Costs Summary ── */
 #costs-summary {
   max-width: 700px;
